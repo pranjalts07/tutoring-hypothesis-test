@@ -1,0 +1,6 @@
+---
+title: "STAT 630 - Final Project"
+author: "Shrusthi, Pranjal, Jeevan"
+format: pdf
+editor: visual
+---
