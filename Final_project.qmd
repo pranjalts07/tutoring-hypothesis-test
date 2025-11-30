@@ -4,3 +4,232 @@ author: "Shrusthi, Pranjal, Jeevan"
 format: pdf
 editor: visual
 ---
+
+# 1. Setup & Loading the datset
+
+```{r}
+#| label: setup
+#| include: false
+
+knitr::opts_chunk$set(
+  echo = TRUE, 
+  message = FALSE, 
+  warning = FALSE
+)
+
+
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+student <- read_csv("/Users/pranjalts/Desktop/CSUEB/sem_1/SM/DAP/student-performance-analysis/student_maths.csv")
+```
+
+# 2. Data Import & Cleaning
+
+let's convert the ‘paid’ column into a factor so R treats it as a categorical grouping variable for the two-means hypothesis test.
+
+```{r}
+student <- student |>
+select(G3, paid, studytime, failures, absences, Medu, Fedu) |>
+mutate(
+paid = as.factor(paid)
+)
+```
+
+```{r}
+table(student$paid)
+```
+
+```{r}
+colSums(is.na(student))
+```
+
+There are no missing values in the dataset.
+
+```{r}
+summary(student)
+```
+
+Final grades (G3) range from 0–20. Studytime values (1–4) represent weekly study hours from less than 2 hours to more than 10 hours. The ‘failures’ variable ranges from 0–3, where it represents past failures. Absences range from 0 to 75, indicating the total number of school days a student missed. Parental education levels (Medu and Fedu) range from 0–4, representing increasing levels of education. The paid tutoring groups include 214 of ‘no’ and 181 of ‘yes’ students.
+
+# 3. Exploratory Data Analysis
+
+```{r}
+student |>
+  group_by(paid) |>
+  summarise(
+    mean = mean(G3),
+    sd = sd(G3),
+    median = median(G3),
+    n = n()
+  )
+```
+
+```{r}
+student |> 
+  ggplot(aes(G3, fill = paid)) +
+  geom_histogram(binwidth = 2,
+                 col = "white",
+                 show.legend = FALSE) +
+  facet_wrap(~ paid) +
+  labs(title = "Distribution of Final Math Grades by Paid Tutoring",
+       x = "Final Math Grade (G3)",
+       y = "Count")
+
+```
+
+```{r}
+student |>
+  ggplot(aes(x = absences, y = G3)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Absences vs Final Grade (G3)",
+       x = "Number of Absences",
+       y = "Final Grade")
+```
+
+```{r}
+
+student |>
+  ggplot(aes(x = as.factor(studytime), y = G3, fill = as.factor(studytime))) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(title = "Final Grade (G3) by Weekly Study Time",
+       x = "Weekly Study Time (1 to 4)",
+       y = "Final Grade (G3)")
+
+```
+
+```{r}
+student |>
+  ggplot(aes(x = as.factor(failures), fill = paid)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Distribution of Past Failures by Paid Tutoring Group",
+       x = "Number of Past Failures",
+       y = "Count",
+       fill = "Paid Tutoring")
+
+```
+
+```{r}
+student <- student |>
+  mutate(parent_edu_group = as.factor(round(parent_edu_avg)))
+
+student |>
+  ggplot(aes(x = parent_edu_group, y = G3, fill = parent_edu_group)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(title = "Final Grades by Average Parental Education Level",
+       x = "Average Parental Education (0–4)",
+       y = "Final Grade (G3)")
+
+```
+
+```{r}
+student <- student |>
+  mutate(parent_edu_group = as.factor(round((Medu + Fedu) / 2)))
+
+student |>
+  ggplot(aes(x = parent_edu_group, fill = paid)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Parental Education Level vs Paid Tutoring",
+       x = "Average Parental Education (0–4)",
+       y = "Count of Students",
+       fill = "Paid Tutoring")
+
+```
+
+# 3. Assumption Checks:
+
+- Hypotheses:
+
+-   **Null hypothesis (H0):** The population mean final math grades are equal for students who receive paid tutoring and those who do not.
+
+    $H_0: \mu_1 = \mu_2$
+
+-   **Alternative hypothesis (H A):** The mean final math grade for students who receive paid tutoring is greater than that of students who do not.
+
+    $H_A: \mu_1 > \mu_2$
+
+Where,
+
+$\mu_1$ = the population mean final math grade for students who receive paid tutoring.
+
+$\mu_2$ = the population mean final math grade for students who do not receive paid tutoring.
+
+- Check conditions:
+
+*Independence* - Each observation represents a different student, so the observations within each group are independent. The two groups paid tutoring and no paid tutoring do not overlap, so the groups are independent of each other.
+
+*Normality* 
+
+```{r}
+paid_yes <- student |>
+  filter(paid == "yes") |>
+  pull(G3)
+
+paid_no <- student |>
+  filter(paid == "no") |>
+  pull(G3)
+
+n1 <- length(paid_yes)
+n2 <- length(paid_no)
+
+n1; n2
+```
+
+Since both sample sizes exceed 30, the Central Limit Theorem supports approximate normality of the sampling distribution for the mean in each group.
+
+```{r}
+student |>
+  ggplot(aes(sample = G3)) +
+  stat_qq() +
+  stat_qq_line() +
+  facet_wrap(~ paid) +
+  labs(title = "Q–Q Plots of Final Grades by Paid Tutoring",
+       x = "Theoretical Quantiles",
+       y = "Sample Quantiles")
+```
+
+# 4.Statistical Analysis:
+
+-   test statistic
+
+```{r}
+xbar1 <- mean(paid_yes)
+xbar2 <- mean(paid_no)
+
+s1 <- sd(paid_yes)
+s2 <- sd(paid_no)
+
+stat <- xbar1 - xbar2
+null_value <- 0
+se <- sqrt(s1^2/n1 + s2^2/n2)
+
+df <- min(c(n1, n2)) - 1
+
+t_stat <- (stat - null_value) / se
+t_stat
+```
+
+-   p-value
+
+```{r}
+p_val <- pt(t_stat, df = df, lower.tail = FALSE)
+p_val
+```
+
+-   decision and conclusion:
+
+Decision: reject $H_0$
+
+We have enough evidence that the true difference of the mean final math grade (G3) for students who receive paid tutoring compared to students who do not receive paid tutoring is **more than 0**.
+
+- 95% Confidence Interval
+
+```{r}
+t.test(paid_yes, paid_no,
+       alternative = "greater",
+       conf.level = 0.95)
+```
+
