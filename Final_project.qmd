@@ -114,13 +114,13 @@ student |>
 
 ```{r}
 student <- student |>
-  mutate(parent_edu_group = as.factor(round(parent_edu_avg)))
+  mutate(parent_edu_group = as.factor(round((Medu + Fedu) / 2)))
 
 student |>
   ggplot(aes(x = parent_edu_group, y = G3, fill = parent_edu_group)) +
   geom_boxplot(show.legend = FALSE) +
   labs(title = "Final Grades by Average Parental Education Level",
-       x = "Average Parental Education (0–4)",
+       x = "Average Parental Education (0 to 4)",
        y = "Final Grade (G3)")
 
 ```
@@ -133,7 +133,7 @@ student |>
   ggplot(aes(x = parent_edu_group, fill = paid)) +
   geom_bar(position = "dodge") +
   labs(title = "Parental Education Level vs Paid Tutoring",
-       x = "Average Parental Education (0–4)",
+       x = "Average Parental Education (0 to 4)",
        y = "Count of Students",
        fill = "Paid Tutoring")
 
@@ -141,7 +141,7 @@ student |>
 
 # 3. Assumption Checks:
 
-- Hypotheses:
+-   Hypotheses:
 
 -   **Null hypothesis (H0):** The population mean final math grades are equal for students who receive paid tutoring and those who do not.
 
@@ -157,11 +157,11 @@ $\mu_1$ = the population mean final math grade for students who receive paid tut
 
 $\mu_2$ = the population mean final math grade for students who do not receive paid tutoring.
 
-- Check conditions:
+-   Check conditions:
 
 *Independence* - Each observation represents a different student, so the observations within each group are independent. The two groups paid tutoring and no paid tutoring do not overlap, so the groups are independent of each other.
 
-*Normality* 
+*Normality*
 
 ```{r}
 paid_yes <- student |>
@@ -225,11 +225,10 @@ Decision: reject $H_0$
 
 We have enough evidence that the true difference of the mean final math grade (G3) for students who receive paid tutoring compared to students who do not receive paid tutoring is **more than 0**.
 
-- 95% Confidence Interval
+-   95% Confidence Interval
 
 ```{r}
 t.test(paid_yes, paid_no,
        alternative = "greater",
        conf.level = 0.95)
 ```
-
