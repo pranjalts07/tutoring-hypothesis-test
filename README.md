@@ -5,12 +5,11 @@
 ![Project](https://img.shields.io/badge/Project-Complete-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
----
 ##  Research Question
 
 **Do students who receive paid tutoring achieve higher final math grades than students who do not receive tutoring?**
 
----
+
 ## Project Overview
 
 This project is a **statistical hypothesis testing study** examining whether **paid tutoring** is associated with higher **final mathematics performance (G3)** among secondary-school students.
@@ -18,7 +17,7 @@ This project is a **statistical hypothesis testing study** examining whether **p
 Using the **UCI Student Performance – Mathematics** dataset, the analysis applies **exploratory data analysis (EDA)**, **visualization**, and a **two-sample t-test** to compare the mean final math grades of students who received paid tutoring with those who did not. 
 
 The project is implemented in **R** using **Quarto** for reproducible reporting.
----
+
 
 ## Hypotheses
 
@@ -27,8 +26,6 @@ The project is implemented in **R** using **Quarto** for reproducible reporting.
 
 - **Alternative Hypothesis (H₁):**  
   Students who receive paid tutoring have a higher mean final math grade than those who do not.
-
----
 
 ## 🧪 Methodology
 
@@ -41,7 +38,7 @@ The analysis follows a structured statistical workflow:
    - Normality
 4. Statistical inference using a **two-sample t-test** to compare mean final grades between the two independent groups.
 5. decision and conclusion.
----
+
 
 ## Key Findings
 
