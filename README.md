@@ -27,7 +27,7 @@ The project is implemented in **R** using **Quarto** for reproducible reporting.
 - **Alternative Hypothesis (H₁):**  
   Students who receive paid tutoring have a higher mean final math grade than those who do not.
 
-## 🧪 Methodology
+##  Methodology
 
 The analysis follows a structured statistical workflow:
 
