@@ -1,4 +1,4 @@
-# 📊 Tutoring Effect Hypothesis Test
+# Tutoring Effect Hypothesis Test
 
 ![R](https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white)
 ![Statistics](https://img.shields.io/badge/Statistics-Hypothesis%20Testing-blue)
@@ -6,24 +6,21 @@
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 ---
-
-## 📌 Project Overview
-
-This project is a **statistical hypothesis testing study** that examines whether **paid tutoring** has a measurable impact on **students’ final mathematics performance (G3)**.
-
-Using the **UCI Student Performance – Mathematics** dataset, the analysis applies **exploratory data analysis (EDA)**, **visualizations**, and a **two-sample t-test** to compare final grades between students who received paid tutoring and those who did not.
-
-The project is implemented in **R** using **Quarto** for reproducible reporting.
-
----
-
-## ❓ Research Question
+##  Research Question
 
 **Do students who receive paid tutoring achieve higher final math grades than students who do not receive tutoring?**
 
 ---
+## Project Overview
 
-## 🧠 Hypotheses
+This project is a **statistical hypothesis testing study** examining whether **paid tutoring** is associated with higher **final mathematics performance (G3)** among secondary-school students.
+
+Using the **UCI Student Performance – Mathematics** dataset, the analysis applies **exploratory data analysis (EDA)**, **visualization**, and a **two-sample t-test** to compare the mean final math grades of students who received paid tutoring with those who did not. 
+
+The project is implemented in **R** using **Quarto** for reproducible reporting.
+---
+
+## Hypotheses
 
 - **Null Hypothesis (H₀):**  
   There is no difference in mean final math grades (G3) between students who receive paid tutoring and those who do not.
@@ -35,28 +32,20 @@ The project is implemented in **R** using **Quarto** for reproducible reporting.
 
 ## 🧪 Methodology
 
-The analysis follows these steps:
+The analysis follows a structured statistical workflow:
 
-1. Data cleaning and preprocessing  
-2. Exploratory Data Analysis (EDA)  
-   - Summary statistics  
-   - Visualizations (histograms, boxplots)  
-3. Assumption checks  
-   - Independence  
-   - Sample size and approximate normality  
-4. Statistical inference using a **Welch Two-Sample t-test**
-
-The Welch t-test was chosen to account for **unequal variances** between groups.
-
+1. Data cleaning and preprocessing. 
+2. Exploratory Data Analysis (EDA).   
+3. Assumption checks:  
+   - Independence of observations  
+   - Normality
+4. Statistical inference using a **two-sample t-test** to compare mean final grades between the two independent groups.
+5. decision and conclusion.
 ---
 
-## 📈 Key Findings
+## Key Findings
 
-- Students who received paid tutoring showed a **higher average final math grade (G3)** than students who did not.
-- The hypothesis test returned a **statistically significant result**, providing evidence against the null hypothesis.
-- Although statistically significant, the observed effect size is **moderate**, suggesting tutoring offers a measurable but limited improvement in performance.
-
----
-
-## 🗂️ Repository Structure
-
+- Students who received paid tutoring had a **slightly higher mean final math grade** compared to those who did not receive tutoring.
+- The two-sample t-test produced a **statistically significant p-value**, providing evidence against the null hypothesis.
+- The 95% confidence interval for the mean difference was entirely positive, indicating that the true mean final grade for tutored students is likely higher.
+- Despite statistical significance, the **effect size was small**, suggesting that the practical impact of tutoring on final grades is modest.
